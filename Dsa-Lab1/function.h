@@ -42,3 +42,51 @@ struct Examinee
 Examinee readExaminee(string line_info);
 vector<Examinee>readExamineeList(string file_name);
 void writeScores(vector<Examinee> examinee_list, string out_file_name);
+struct Node
+{
+	int key;
+	Node* next;
+};
+struct List
+{
+	Node* head;
+	Node* tail;
+};
+void removeTail(List& l);
+void removeHead(List& l);
+void addTail(List& l, int data);
+void addHead(List& l, int data);
+List createlist(Node* node);
+Node* createNode(int data);
+void removeAll(List& l);
+void printList(List l);
+void removeBefore(List& l, int val);
+void removeAfter(List& l, int val);
+void addPos(List& l, int data, int pos);
+int countElements(List l);
+void removePos(List& l, int pos);
+void addBefore(List& l, int data, int val);
+void addAfter(List& l, int data, int val);
+List reverseList(List l);
+void removeDuplicate(List& l);
+void removeNode(List& l, Node* pNode);
+bool removeElement(List& l, int key);
+struct DNode {
+	int key;
+	DNode* next;
+	DNode* prev;
+};
+struct DList {
+	DNode* head;
+	DNode* tail;
+};
+DNode* createDNode(int data);
+DList createDList(DNode* node);
+void addDHead(DList& l, int data);
+void printDList(DList l);
+void addDTail(DList& l, int data);
+void removeDHead(DList& l);
+void removeDTail(DList& l);
+void removeDAll(DList& l);
+void removeDBefore(DList& l, int val);
+void removeDAfter(DList& l, int val);

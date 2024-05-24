@@ -454,18 +454,7 @@ bool IsEven(int n)
 	}
 	return IsEven(n / 10);
 }
-int countCommonDivisor(int x, int y, int count = 0, int start = 1)
-{
-	if (start == x || start == y)
-	{
-		return count;
-	}
-	if (x % start == 0 && y % start == 0)
-	{
-		return countCommonDivisor(x, y, count + 1, start + 1);
-	}
-	return countCommonDivisor(x, y, count, start + 1);
-}
+
 int GreatestCommonDivisor(int x, int y)
 {
 	if (y % x == 0)
@@ -627,4 +616,510 @@ void writeScores(vector<Examinee> examinee_list, string out_file_name)
 		os << examinee_list[i].id << " " << compulsory << " " << examinee_list[i].natural_science << " " << examinee_list[i].social_science << endl;
 	}
 	os.close();
+}
+Node* createNode(int data)
+{
+	Node* newNode = new Node;
+	newNode->key = data;
+	newNode->next = NULL;
+	return newNode;
+}
+List createlist(Node* node)
+{
+	List l;
+	l.head = node;
+	l.tail = node;
+	return l;
+}
+void addHead(List& l, int data)
+{
+	Node* newNode = createNode(data);
+	if (l.head == NULL)
+	{
+		l.head = newNode;
+		l.tail = newNode;
+		return;
+	}
+	newNode->next = l.head;
+	l.head = newNode;
+}
+void addTail(List& l, int data)
+{
+	Node* newNode = createNode(data);
+	if (l.head == NULL)
+	{
+		l.head = newNode;
+		l.tail = newNode;
+		return;
+	}
+	l.tail->next = newNode;
+	l.tail = newNode;
+}
+void removeHead(List& l)
+{
+	if (l.head == NULL)
+	{
+		return;
+	}
+	if (l.head->next == NULL)
+	{
+		delete l.head;
+		l.head = NULL;
+		l.tail = NULL;
+		return;
+	}
+	Node* tmp = l.head;
+	l.head = l.head->next;
+	delete tmp;
+}
+void removeTail(List& l)
+{
+	if (l.head == NULL)
+	{
+		return;
+	}
+	if (l.head->next == NULL)
+	{
+		delete l.head;
+		l.head = NULL;
+		l.tail = NULL;
+		return;
+	}
+	Node* pCurr = l.head;
+	while (pCurr->next->next != NULL)
+	{
+		pCurr = pCurr->next;
+	}
+	delete l.tail;
+	l.tail = pCurr;
+	l.tail->next = NULL;
+}
+void removeAll(List& l)
+{
+	while (l.head != NULL)
+	{
+		removeHead(l);
+	}
+}
+void printList(List l)
+{
+	for (Node* pCurr = l.head; pCurr != NULL; pCurr = pCurr->next)
+	{
+		cout << pCurr->key << " ";
+	}
+}
+void removeBefore(List& l, int val)
+{
+	if (l.head == NULL || l.head->next == NULL || l.head->key == val)// only one element
+	{
+		return;
+	}
+	if (l.head->next->key == val)
+	{
+		removeHead(l);
+		return;
+	}
+	Node* pCurr = l.head;
+	Node* pPrev = NULL;
+	while (pCurr->next->key != val && pCurr != NULL)
+	{
+		pPrev = pCurr;
+		pCurr = pCurr->next;
+	}
+	if (pCurr == NULL)
+	{
+		return;
+	}
+	pPrev->next = pCurr->next;
+	delete pCurr;
+}
+void removeAfter(List& l, int val)
+{
+	if (l.head == NULL || l.tail->key == val || l.head->next == NULL)
+	{
+		return;
+	}
+	Node* pCurr = l.head->next;
+	Node* pPrev = l.head;
+	while (pPrev->key != val && pCurr->next != NULL)
+	{
+		pPrev = pCurr;
+		pCurr = pCurr->next;
+	}
+	if (pPrev->next == l.tail)
+	{
+		removeTail(l);
+		return;
+	}
+	pPrev->next = pCurr->next;
+	delete pCurr;
+}
+int countElements(List l)
+{
+	int count = 0;
+	for (Node* pCurr = l.head; pCurr != NULL; pCurr = pCurr->next)
+	{
+		count++;
+	}
+	return count;
+}
+int countCommonDivisor(int x, int y, int count = 0, int start = 1)
+{
+	if (start == x || start == y)
+	{
+		if (x % y == 0 || y % x == 0)
+		{
+			return count + 1;
+		}
+		return count;
+	}
+	if (x % start == 0 && y % start == 0)
+	{
+		return countCommonDivisor(x, y, count + 1, start + 1);
+	}
+	return countCommonDivisor(x, y, count, start + 1);
+}
+void addPos(List& l, int data, int pos)
+{
+	Node* newNode = createNode(data);
+	int count = countElements(l);
+	if (pos < 0 || pos > count)
+	{
+		return;
+	}
+	if (pos == 0)
+	{
+		addHead(l, data);
+		return;
+	}
+	if (pos == count)
+	{
+		addTail(l, data);
+		return;
+	}
+	Node* pPrev = l.head;
+	Node* pCurr = l.head->next;
+	for (int i = 1; i < count; i++)
+	{
+		if (i == pos)
+		{
+			pPrev->next = newNode;
+			newNode->next = pCurr;
+			return;
+		}
+		pPrev = pCurr;
+		pCurr = pCurr->next;
+	}
+}
+void removePos(List& l, int pos)
+{
+	int count = countElements(l);
+	if (pos < 0 || pos >= count)
+	{
+		return;
+	}
+	if (pos == 0)
+	{
+		removeHead(l);
+		return;
+	}
+	if (pos == count - 1)
+	{
+		removeTail(l);
+		return;
+	}
+	Node* pPrev = l.head;
+	Node* pCurr = l.head->next;
+	for (int i = 1; i < count; i++)
+	{
+		if (i == pos)
+		{
+			pPrev->next = pCurr->next;
+			delete pCurr;
+			return;
+		}
+		pPrev = pCurr;
+		pCurr = pCurr->next;
+	}
+}
+void addBefore(List& l, int data, int val)
+{
+	if (l.head == NULL)
+	{
+		return;
+	}
+	if (l.head->key == val)
+	{
+		addHead(l, data);
+		return;
+	}
+	Node* pPrev = NULL;
+	Node* pCurr = l.head;
+	while (pCurr->key != val && pCurr != NULL)
+	{
+		pPrev = pCurr;
+		pCurr = pCurr->next;
+	}
+	if (pCurr == NULL)
+	{
+		return;
+	}
+	Node* newNode = createNode(data);
+	pPrev->next = newNode;
+	newNode->next = pCurr;
+}
+void addAfter(List& l, int data, int val)
+{
+	if (l.head == NULL)
+	{
+		return;
+	}
+	if (l.tail->key == val)
+	{
+		addTail(l, data);
+		return;
+	}
+	Node* pCurr = l.head->next;
+	Node* pPrev = l.head;
+	while (pPrev->key != val && pPrev->next != NULL)
+	{
+		pPrev = pCurr;
+		pCurr = pCurr->next;
+	}
+	if (pPrev->next == NULL)
+	{
+		return;
+	}
+	Node* newNode = createNode(data);
+	pPrev->next = newNode;
+	newNode->next = pCurr;
+}
+List reverseList(List l)
+{
+	List res = createlist(NULL);
+	if (l.head == NULL)
+	{
+		return res;
+	}
+	for (Node* pCurr = l.head; pCurr != NULL; pCurr = pCurr->next)
+	{
+		addHead(res, pCurr->key);
+	}
+	return res;
+}
+void removeNode(List& l, Node* pNode)
+{
+	if (pNode == l.head)
+	{
+		removeHead(l);
+		return;
+	}
+	Node* pPrev = l.head;
+	Node* pCurr = l.head->next;
+	while (pCurr != pNode && pCurr != NULL)
+	{
+		pPrev = pCurr;
+		pCurr = pCurr->next;
+	}
+	if (pCurr->next == NULL)
+	{
+		removeTail(l);
+		return;
+	}
+	pPrev->next = pCurr->next;
+	delete pCurr;
+}
+void removeDuplicate(List& l)
+{
+	for (Node* pCurr1 = l.head; pCurr1->next != NULL, pCurr1 != NULL; pCurr1 = pCurr1->next)
+	{
+		for (Node* pCurr2 = pCurr1->next; pCurr2 != NULL;)
+		{
+			if (pCurr1->key == pCurr2->key)
+			{
+				Node* tmp = pCurr2->next;
+				removeNode(l, pCurr2);
+				pCurr2 = tmp;
+			}
+			else
+			{
+				pCurr2 = pCurr2->next;
+			}
+		}
+	}
+}
+bool removeElement(List& l, int key)
+{
+	bool check = false;
+	for (Node* pCurr = l.head; pCurr != NULL; pCurr = pCurr->next)
+	{
+		if (pCurr->key == key)
+		{
+			check = true;
+		}
+	}
+	if (check == false)
+	{
+		return false;
+	}
+	for (Node* pCurr = l.head; pCurr != NULL; )
+	{
+		if (pCurr->key == key)
+		{
+			Node* tmp = pCurr->next;
+			removeNode(l, pCurr);
+			pCurr = tmp;
+		}
+		else
+		{
+			pCurr = pCurr->next;
+		}
+	}
+	return true;
+}
+
+DNode* createDNode(int data)
+{
+	DNode* newNode = new DNode;
+	newNode->next = NULL;
+	newNode->prev = NULL;
+	newNode->key = data;
+	return newNode;
+}
+DList createDList(DNode* node)
+{
+	DList l;
+	l.head = node;
+	l.tail = node;
+	return l;
+}
+void addDHead(DList& l, int data)
+{
+	DNode* newNode = createDNode(data);
+	if (l.head == NULL)
+	{
+		l.head = newNode;
+		l.tail = newNode;
+		return;
+	}
+	newNode->next = l.head;
+	l.head->prev = newNode;
+	l.head = newNode;
+}
+void printDList(DList l)
+{
+	for (DNode* pCurr = l.head; pCurr != NULL; pCurr = pCurr->next)
+	{
+		cout << pCurr->key << " ";
+	}
+}
+void addDTail(DList& l, int data)
+{
+	DNode* newNode = createDNode(data);
+	if (l.head == NULL)
+	{
+		l.head = newNode;
+		l.tail = newNode;
+		return;
+	}
+	l.tail->next = newNode;
+	newNode->prev = l.tail;
+	l.tail = newNode;
+}
+void removeDHead(DList& l)
+{
+	if (l.head == NULL)
+	{
+		return;
+	}
+	if (l.head->next == NULL)
+	{
+		delete l.head;
+		l.head = NULL;
+		l.tail = NULL;
+		return;
+	}
+	DNode* pTmp = l.head;
+	l.head = l.head->next;
+	l.head->prev = NULL;
+	delete pTmp;
+}
+void removeDTail(DList& l)
+{
+	if (l.head == NULL)
+	{
+		return;
+	}
+	if (l.head->next == NULL)
+	{
+		delete l.head;
+		l.head = NULL;
+		l.tail = NULL;
+		return;
+	}
+	DNode* pCurr = l.head;
+	while (pCurr->next != NULL)
+	{
+		pCurr = pCurr->next;
+	}
+	l.tail = pCurr->prev;
+	l.tail->next = NULL;
+	delete pCurr;
+}
+void removeDAll(DList& l)
+{
+	while (l.head != NULL)
+	{
+		removeDHead(l);
+	}
+}
+void removeDBefore(DList& l, int val)
+{
+	if (l.head == NULL || l.head == l.tail)
+	{
+		return;//the value is in the head or the list don't have any value
+	}
+	if (l.head->next->key == val)
+	{
+		removeDHead(l);// the value is in the next of the head
+		return;
+	}
+	DNode* pCurr = l.head;
+	while (pCurr->key != val && pCurr != NULL)
+	{
+		pCurr = pCurr->next;
+	}
+	if (pCurr == NULL) //Don't have value in the list
+	{
+		return;
+	}
+	DNode* tmp = pCurr->prev;
+	pCurr->prev = tmp->prev;
+	(tmp->prev)->next = pCurr;
+	delete tmp;
+}
+void removeDAfter(DList& l, int val)
+{
+	if (l.head == NULL || l.head == l.tail || l.tail->key == val) //the value is in the head or the list don't have any value
+	{
+		return; 
+	}
+	if (l.tail->prev->key == val)
+	{
+		removeDTail(l);
+		return;
+	}
+	DNode* pCurr = l.head;
+	while (pCurr->key != val && pCurr != NULL)
+	{
+		pCurr = pCurr->next;
+	}
+	if (pCurr == NULL)
+	{
+		return;
+	}
+	DNode* tmp = pCurr->next;
+	pCurr->next = tmp->next;
+	(tmp->next)->prev = pCurr;
+	delete tmp;
 }
