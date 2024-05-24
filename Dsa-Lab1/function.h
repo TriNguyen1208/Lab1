@@ -90,3 +90,33 @@ void removeDTail(DList& l);
 void removeDAll(DList& l);
 void removeDBefore(DList& l, int val);
 void removeDAfter(DList& l, int val);
+void addDPos(DList& l, int data, int pos);
+void removeDPos(DList& l, int pos);
+void addDBefore(DList& l, int data, int val);
+void addDAfter(DList& l, int data, int val);
+DList reverseDList(DList l);
+void removeDDuplicate(DList& l);
+void removeDNode(DList& l, DNode* node);
+void removeDElement(DList& l, int key);
+struct stack
+{
+	Node* pTop;
+};
+stack initStack(int data);
+bool isEmptyStack(stack s);
+void Push(stack& s, int key);
+void PrintStack(stack s);
+void Pop(stack& s);
+int CountStack(stack s);
+struct queue
+{
+	Node* front;
+	Node* rear;
+};
+queue initQueue(int data);
+void Enqueue(queue& q, int data);
+void Dequeue(queue& q);
+int countQueue(queue q);
+bool isEmptyQueue(queue q);
+void printQueue(queue q);
+void backtrack(string arr, int n);

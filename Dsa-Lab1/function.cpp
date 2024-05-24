@@ -931,7 +931,7 @@ void removeNode(List& l, Node* pNode)
 }
 void removeDuplicate(List& l)
 {
-	for (Node* pCurr1 = l.head; pCurr1->next != NULL, pCurr1 != NULL; pCurr1 = pCurr1->next)
+	for (Node* pCurr1 = l.head; pCurr1 != NULL; pCurr1 = pCurr1->next)
 	{
 		for (Node* pCurr2 = pCurr1->next; pCurr2 != NULL;)
 		{
@@ -1122,4 +1122,332 @@ void removeDAfter(DList& l, int val)
 	pCurr->next = tmp->next;
 	(tmp->next)->prev = pCurr;
 	delete tmp;
+}
+int countDElement(DList l)
+{
+	int count = 0;
+	for (DNode* pCurr = l.head; pCurr != NULL; pCurr = pCurr->next)
+	{
+		count++;
+	}
+	return count;
+}
+void addDPos(DList& l, int data, int pos)
+{
+	int countElement = countDElement(l);
+	if (pos == 0)
+	{
+		addDHead(l, data);
+		return;
+	}
+	if (pos == countElement)
+	{
+		addDTail(l, data);
+		return;
+	}
+	if (pos < 0 || pos > countElement)
+	{
+		return;
+	}
+	int cnt = 0;
+	DNode* pCurr = l.head;
+	for (int i = 0; i < pos; i++)
+	{
+		pCurr = pCurr->next;
+	}
+	DNode* newNode = createDNode(data);
+	pCurr->prev->next = newNode;
+	newNode->prev = pCurr->prev;
+	newNode->next = pCurr;
+	pCurr->prev = newNode;
+}
+void removeDPos(DList& l, int pos)
+{
+	int countElement = countDElement(l);
+	if (pos < 0 || pos > countElement - 1)
+	{
+		return;
+	}
+	if (pos == 0)
+	{
+		removeDHead(l);
+		return;
+	}
+	if (pos == countElement - 1)
+	{
+		removeDTail(l);
+		return;
+	}
+	DNode* pCurr = l.head;
+	for (int i = 0; i < pos; i++)
+	{
+		pCurr = pCurr->next;
+	}
+	DNode* tmp = pCurr;
+	pCurr->prev->next = tmp->next;
+	tmp->next->prev = pCurr->prev;
+	delete tmp;
+}
+bool checkIsVal(DList l, int data)
+{
+	for (DNode* pCurr = l.head; pCurr != NULL; pCurr = pCurr->next)
+	{
+		if (pCurr->key == data)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+void addDBefore(DList& l, int data, int val)
+{
+	if (checkIsVal(l, val) == false)
+	{
+		return;
+	}
+	if (l.head->key == val)
+	{
+		addDHead(l, data);
+		return;
+	}
+	DNode* pCurr = l.head;
+	while (pCurr->key != val)
+	{
+		pCurr = pCurr->next;
+	}
+	DNode* newNode = createDNode(data);
+	pCurr->prev->next = newNode;
+	newNode->prev = pCurr->prev;
+	newNode->next = pCurr;
+	pCurr->prev = newNode;
+}
+void addDAfter(DList& l, int data, int val)
+{
+	if (checkIsVal(l, val) == false)
+	{
+		return;
+	}
+	if (l.tail->key == val)
+	{
+		addDTail(l, data);
+		return;
+	}
+	DNode* pCurr = l.head;
+	while (pCurr->key != val)
+	{
+		pCurr = pCurr->next;
+	}
+	DNode* newNode = createDNode(data);
+	DNode* tmp = pCurr->next;
+	pCurr->next = newNode;
+	newNode->prev = pCurr;
+	newNode->next = tmp;
+	tmp->prev = newNode;
+}
+DList reverseDList(DList l)
+{
+	if (l.head == NULL)
+	{
+		DList rubbish = createDList(NULL);
+		return rubbish;
+	}
+	DList newList = createDList(NULL);
+	DNode* pCurr = l.head;
+	while (pCurr != NULL)
+	{
+		addDHead(newList, pCurr->key);
+		pCurr = pCurr->next;
+	}
+	return newList;
+}
+void removeDNode(DList& l, DNode* node)
+{
+	if (node == l.head)
+	{
+		removeDHead(l);
+		return;
+	}
+	if (node == l.tail)
+	{
+		removeDTail(l);
+		return;
+	}
+	node->prev->next = node->next;
+	node->next->prev = node->prev;
+	delete node;
+}
+void removeDDuplicate(DList& l)
+{
+	for (DNode* pCurr1 = l.head; pCurr1 != NULL; pCurr1 = pCurr1->next)
+	{
+		for (DNode* pCurr2 = pCurr1->next; pCurr2 != NULL;)
+		{
+			if (pCurr2->key == pCurr1->key)
+			{
+				DNode* tmp = pCurr2->next;
+				removeDNode(l, pCurr2);
+				pCurr2 = tmp;
+			}
+			else
+			{
+				pCurr2 = pCurr2->next;
+			}
+		}
+	}
+}
+void removeDElement(DList& l, int key)
+{
+	if (checkIsVal(l, key) == false)
+	{
+		return;
+	}
+	for (DNode* pCurr = l.head; pCurr != NULL;)
+	{
+		if (pCurr->key == key)
+		{
+			DNode* tmp = pCurr->next;
+			removeDNode(l, pCurr);
+			pCurr = tmp;
+		}
+		else
+		{
+			pCurr = pCurr->next;
+		}
+	}
+}
+stack initStack(int data)
+{
+	stack s;
+	s.pTop = new Node;
+	s.pTop->key = data;
+	s.pTop->next = NULL;
+	return s;
+}
+bool isEmptyStack(stack s)
+{
+	if (s.pTop == NULL)
+	{
+		return true;
+	}
+	return false;
+}
+void Push(stack& s, int key)
+{
+	Node* newNode = createNode(key);
+	if (s.pTop == NULL)
+	{
+		s.pTop = newNode;
+		return;
+	}
+	newNode->next = s.pTop;
+	s.pTop = newNode;
+}
+void PrintStack(stack s)
+{
+	for (Node* pCurr = s.pTop; pCurr != NULL; pCurr = pCurr->next)
+	{
+		cout << pCurr->key << " ";
+	}
+}
+void Pop(stack& s)
+{
+	if (s.pTop == NULL)
+	{
+		return;
+	}
+	if (s.pTop->next == NULL)
+	{
+		delete s.pTop;
+		s.pTop = NULL;
+		return;
+	}
+	Node* tmp = s.pTop;
+	s.pTop = s.pTop->next;
+	delete tmp;
+}
+int CountStack(stack s)
+{
+	int count = 0;
+	for (Node* pCurr = s.pTop; pCurr != NULL; pCurr = pCurr->next)
+	{
+		count++;
+	}
+	return count;
+}
+queue initQueue(int data)
+{
+	queue q;
+	q.front = q.rear = new Node;
+	q.front->key = q.rear->key = data;
+	q.front->next = q.rear->next = NULL;
+	return q;
+}
+void Enqueue(queue& q, int data)
+{
+	Node* newNode = createNode(data);
+	if (q.front == NULL)
+	{
+		q.front = q.rear = newNode;
+		return;
+	}
+	q.rear->next = newNode;
+	q.rear = newNode;
+}
+void Dequeue(queue& q)
+{
+	if (q.front == NULL)
+	{
+		return;
+	}
+	if (q.front == q.rear)
+	{
+		delete q.front;
+		q.front = q.rear = NULL;
+		return;
+	}
+	Node* tmp = q.front;
+	q.front = q.front->next;
+	delete tmp;
+}
+int countQueue(queue q)
+{
+	int count = 0;
+	for (Node* pCurr = q.front; pCurr != NULL; pCurr = pCurr->next)
+	{
+		count++;
+	}
+	return count;
+}
+bool isEmptyQueue(queue q)
+{
+	if (q.front == NULL)
+	{
+		return true;
+	}
+	return false;
+}
+void printQueue(queue q)
+{
+	for (Node* pCurr = q.front; pCurr != NULL; pCurr = pCurr->next)
+	{
+		cout << pCurr->key << " ";
+	}
+}
+void backtrack(string arr, int n, int count, int start)
+{
+	if (count == n)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			cout << arr[i];
+		}
+		cout << " ";
+		return;
+	}
+	for (int i = start; i <= 9; i++)
+	{
+		arr += i + '0';
+		backtrack(arr, n, count + 1, i + 1);
+		arr.pop_back();
+	}
 }
