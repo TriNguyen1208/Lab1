@@ -1451,3 +1451,222 @@ void backtrack(string arr, int n, int count, int start)
 		arr.pop_back();
 	}
 }
+DNodeFile* createDNodeFile(Examinee data)
+{
+	DNodeFile* newNode = new DNodeFile;
+	newNode->data = data;
+	newNode->next = NULL;
+	newNode->prev = NULL;
+	return newNode;
+}
+void addDTailFile(DListFile& lst, Examinee data)
+{
+	DNodeFile* newNode = createDNodeFile(data);
+	if (lst.head == NULL)
+	{
+		lst.head = newNode;
+		lst.tail = newNode;
+		return;
+	}
+	lst.tail->next = newNode;
+	newNode->prev = lst.tail;
+	lst.tail = newNode;
+}
+void readFileDLinkedList(DListFile& lst, string fileName)
+{
+	ifstream fin(fileName.c_str());
+	if (!fin.is_open())
+	{
+		return;
+	}
+	string tmp;
+	getline(fin, tmp);
+	while (getline(fin, tmp))
+	{
+		Examinee examinee;
+		stringstream ss(tmp);
+		getline(ss, tmp, ',');
+		examinee.id = tmp;
+		getline(ss, tmp, ',');
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.maths = 0;
+		else examinee.maths = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.literature = 0;
+		else examinee.literature = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.physics = 0;
+		else examinee.physics = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.chemistry = 0;
+		else examinee.chemistry = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.biology = 0;
+		else examinee.biology = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.history = 0;
+		else examinee.history = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.geography = 0;
+		else examinee.geography = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.civic_education = 0;
+		else examinee.civic_education = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.natural_science = 0;
+		else examinee.natural_science = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.social_science = 0;
+		else examinee.social_science = stof(tmp);
+		getline(ss, tmp, ',');
+		if (tmp == "") examinee.foreign_language = 0;
+		else examinee.foreign_language = stof(tmp);
+		addDTailFile(lst, examinee);
+	}
+}
+DNodePokemon* createNode(Pokemon data)
+{
+	DNodePokemon* newNode = new DNodePokemon;
+	newNode->data = data;
+	newNode->next = NULL;
+	newNode->prev = NULL;
+	return newNode;
+}
+void addTail(DListPokemon& lst, Pokemon data)
+{
+	DNodePokemon* newNode = createNode(data);
+	if (lst.head == NULL)
+	{
+		lst.head = newNode;
+		lst.tail = newNode;
+		return;
+	}
+	lst.tail->next = newNode;
+	newNode->prev = lst.tail;
+	lst.tail = newNode;
+}
+void removeDauNgoacVuongAndDauNgoacKep(string& s)
+{
+	if (s[0] == '\"' && s[s.length() - 1] == '\"')
+	{
+		s.erase(0, 1);
+		s.erase(s.length() - 1, 1);
+	}
+	if (s[0] == '[' && s[s.length() - 1] == ']')
+	{
+		s.erase(0, 1);
+		s.erase(s.length() - 1, 1);
+		if (s.empty())
+		{
+			return;
+		}
+	}
+}
+void removeSpePunctuation(string& s)
+{
+	if (s[0] == ' ')
+	{
+		s.erase(0, 1);
+	}
+	if (s[0] == '\'' && s[s.length() - 1] == '\'')
+	{
+		s.erase(0, 1);
+		s.erase(s.length() - 1);
+	}
+	if (s[0] == '\"' && s[s.length() - 1] == '\"')
+	{
+		s.erase(0, 2);
+		s.erase(s.length() - 2);
+	}
+}
+vector<string>Push_Back_Object(string s)
+{
+	vector<string>results;
+	removeDauNgoacVuongAndDauNgoacKep(s);
+	if (s.empty())
+	{
+		return { "" };
+	}
+	stringstream ss_one_object(s);
+	string one_object;
+	while (getline(ss_one_object, one_object, ';'))
+	{
+		removeSpePunctuation(one_object);
+		results.push_back(one_object);
+	}
+	return results;
+}
+void readFilePokemon(string fileName, DListPokemon& lst)
+{
+	ifstream fin(fileName.c_str());
+	if (!fin.is_open())
+	{
+		return;
+	}
+	string rubbish;
+	getline(fin, rubbish);
+	string one_line;
+	Pokemon pokemon;
+	while (getline(fin, one_line))
+	{
+		stringstream ss_one_line(one_line);
+		string tmp_name;
+		string tmp_type;
+		string tmp_abilities;
+		string tmp_tier;
+		string tmp_hp;
+		string tmp_attack;
+		string tmp_defense;
+		string tmp_speAttack;
+		string tmp_speDefense;
+		string tmp_speed;
+		string tmp_next_evoluation;
+		string tmp_move;
+
+		getline(ss_one_line, tmp_name, ',');
+		getline(ss_one_line, tmp_type, ',');
+		getline(ss_one_line, tmp_abilities, ',');
+		getline(ss_one_line, tmp_tier, ',');
+		getline(ss_one_line, tmp_hp, ',');
+		getline(ss_one_line, tmp_attack, ',');
+		getline(ss_one_line, tmp_defense, ',');
+		getline(ss_one_line, tmp_speAttack, ',');
+		getline(ss_one_line, tmp_speDefense, ',');
+		getline(ss_one_line, tmp_speed, ',');
+		getline(ss_one_line, tmp_next_evoluation, ',');
+		getline(ss_one_line, tmp_move, ',');
+
+		pokemon.name = tmp_name;
+		pokemon.type = Push_Back_Object(tmp_type);
+		pokemon.abilities = Push_Back_Object(tmp_abilities);
+		pokemon.tier = tmp_tier;
+		pokemon.hp = stoi(tmp_hp);
+		pokemon.attack = stoi(tmp_attack);
+		pokemon.defense = stoi(tmp_defense);
+		pokemon.speAttack = stoi(tmp_speAttack);
+		pokemon.speDefense = stoi(tmp_speDefense);
+		pokemon.speed = stoi(tmp_speed);
+		pokemon.next_evoluation = Push_Back_Object(tmp_next_evoluation);
+		pokemon.move = Push_Back_Object(tmp_move);
+		addTail(lst, pokemon);
+	}
+	fin.close();
+}
+void printPokemon(DListPokemon lst)
+{
+	for (DNodePokemon* pCurr = lst.head; pCurr != NULL; pCurr = pCurr->next)
+	{
+		cout << pCurr->data.name << " ";
+		cout << pCurr->data.type[0] << " ";
+		cout << pCurr->data.abilities[0] << " ";
+		cout << pCurr->data.tier << " ";
+		cout << pCurr->data.hp << " ";
+		cout << pCurr->data.attack << " ";
+		cout << pCurr->data.defense << " ";
+		cout << pCurr->data.speAttack << " ";
+		cout << pCurr->data.speDefense << " ";
+		cout << pCurr->data.speed << " ";
+		cout << pCurr->data.next_evoluation[0] << " ";
+		cout << pCurr->data.move[0] << endl;
+	}
+}

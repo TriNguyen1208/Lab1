@@ -119,4 +119,46 @@ void Dequeue(queue& q);
 int countQueue(queue q);
 bool isEmptyQueue(queue q);
 void printQueue(queue q);
+struct DNodeFile
+{
+	Examinee data;
+	DNodeFile* next;
+	DNodeFile* prev;
+};
+struct DListFile
+{
+	DNodeFile* head;
+	DNodeFile* tail;
+};
 void backtrack(string arr, int n);
+void readFileDLinkedList(DListFile& lst, string fileName);
+void addDTailFile(DListFile& lst, Examinee data);
+DNodeFile* createDNodeFile(Examinee data);
+struct Pokemon
+{
+	string name;
+	vector<string>type;
+	vector<string>abilities;
+	string tier;
+	int hp, attack, defense, speAttack, speDefense, speed;
+	vector<string> next_evoluation;
+	vector<string>move;
+};
+struct DNodePokemon
+{
+	Pokemon data;
+	DNodePokemon* next;
+	DNodePokemon* prev;
+};
+struct DListPokemon
+{
+	DNodePokemon* head;
+	DNodePokemon* tail;
+};
+void addTail(DListPokemon& lst, Pokemon data);
+DNodePokemon* createNode(Pokemon data);
+void removeDauNgoacVuongAndDauNgoacKep(string& s);
+void removeSpePunctuation(string& s);
+vector<string>Push_Back_Object(string s);
+void readFilePokemon(string fileName, DListPokemon& lst);
+void printPokemon(DListPokemon lst);
