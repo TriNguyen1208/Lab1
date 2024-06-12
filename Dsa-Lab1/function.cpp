@@ -1585,7 +1585,7 @@ vector<string>Push_Back_Object(string s)
 	removeDauNgoacVuongAndDauNgoacKep(s);
 	if (s.empty())
 	{
-		return { "" };
+		return { " " };
 	}
 	stringstream ss_one_object(s);
 	string one_object;
@@ -1634,10 +1634,12 @@ void readFilePokemon(string fileName, DListPokemon& lst)
 		getline(ss_one_line, tmp_speDefense, ',');
 		getline(ss_one_line, tmp_speed, ',');
 		getline(ss_one_line, tmp_next_evoluation, ',');
-		getline(ss_one_line, tmp_move, ',');
+		getline(ss_one_line, tmp_move, '\n');
 
 		pokemon.name = tmp_name;
-		pokemon.type = Push_Back_Object(tmp_type);
+		vector<string>type = Push_Back_Object(tmp_type);
+		pokemon.type1 = type[0];
+		if (type.size() == 2) pokemon.type2 = type[1];
 		pokemon.abilities = Push_Back_Object(tmp_abilities);
 		pokemon.tier = tmp_tier;
 		pokemon.hp = stoi(tmp_hp);
@@ -1649,6 +1651,14 @@ void readFilePokemon(string fileName, DListPokemon& lst)
 		pokemon.next_evoluation = Push_Back_Object(tmp_next_evoluation);
 		pokemon.move = Push_Back_Object(tmp_move);
 		addTail(lst, pokemon);
+
+		//Reset
+		pokemon.type1 = "";
+		pokemon.type2 = "";
+		type.clear();
+		pokemon.move.clear();
+		pokemon.next_evoluation.clear();
+		pokemon.abilities.clear();
 	}
 	fin.close();
 }
@@ -1657,8 +1667,11 @@ void printPokemon(DListPokemon lst)
 	for (DNodePokemon* pCurr = lst.head; pCurr != NULL; pCurr = pCurr->next)
 	{
 		cout << pCurr->data.name << " ";
-		cout << pCurr->data.type[0] << " ";
-		cout << pCurr->data.abilities[0] << " ";
+		cout << pCurr->data.type1 << " " << pCurr->data.type2 << " ";
+		for (int i = 0; i < pCurr->data.abilities.size(); i++)
+		{
+			cout << pCurr->data.abilities[i] << "=";
+		}
 		cout << pCurr->data.tier << " ";
 		cout << pCurr->data.hp << " ";
 		cout << pCurr->data.attack << " ";
@@ -1666,7 +1679,144 @@ void printPokemon(DListPokemon lst)
 		cout << pCurr->data.speAttack << " ";
 		cout << pCurr->data.speDefense << " ";
 		cout << pCurr->data.speed << " ";
-		cout << pCurr->data.next_evoluation[0] << " ";
-		cout << pCurr->data.move[0] << endl;
+		for (int i = 0; i < pCurr->data.next_evoluation.size(); i++)
+		{
+			cout << pCurr->data.next_evoluation[i] << "=";
+		}
+		for (int i = 0; i < pCurr->data.move.size(); i++)
+		{
+			cout << pCurr->data.move[i] << "=";
+		}
+		cout << endl << endl;
+	}
+}
+int countNumsPokemon(string fileName)
+{
+	ifstream fin(fileName.c_str());
+	if (!fin.is_open())
+	{
+		return 0;
+	}
+	string rubbish;
+	getline(fin, rubbish);
+	string tmp;
+	int cnt = 0;
+	while (getline(fin, tmp))
+	{
+		cnt++;
+	}
+	fin.close();
+	return cnt;
+}
+Pokemon*** readFilePokemonPointer(string fileName, int p, int m, int n)
+{
+	if (p * m * n > countNumsPokemon(fileName))
+	{
+		return NULL;
+	}
+	Pokemon*** pokemon = new Pokemon * *[p];
+	for (int i = 0; i < p; i++)
+	{
+		pokemon[i] = new Pokemon* [m];
+		for (int j = 0; j < m; j++)
+		{
+			pokemon[i][j] = new Pokemon[n];
+		}
+	}
+	ifstream fin(fileName.c_str());
+	if (!fin.is_open())
+	{
+		return NULL;
+	}
+	string rubbish;
+	getline(fin, rubbish);
+	for (int i = 0; i < p; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			for (int k = 0; k < n; k++)
+			{
+				string one_line;
+				getline(fin, one_line);
+				string tmp_name;
+				string tmp_type;
+				string tmp_abilities;
+				string tmp_tier;
+				string tmp_hp;
+				string tmp_attack;
+				string tmp_defense;
+				string tmp_speAttack;
+				string tmp_speDefense;
+				string tmp_speed;
+				string tmp_next_evoluation;
+				string tmp_move;
+
+				stringstream ss_one_line(one_line);
+				getline(ss_one_line, tmp_name, ',');
+				getline(ss_one_line, tmp_type, ',');
+				getline(ss_one_line, tmp_abilities, ',');
+				getline(ss_one_line, tmp_tier, ',');
+				getline(ss_one_line, tmp_hp, ',');
+				getline(ss_one_line, tmp_attack, ',');
+				getline(ss_one_line, tmp_defense, ',');
+				getline(ss_one_line, tmp_speAttack, ',');
+				getline(ss_one_line, tmp_speDefense, ',');
+				getline(ss_one_line, tmp_speed, ',');
+				getline(ss_one_line, tmp_next_evoluation, ',');
+				getline(ss_one_line, tmp_move, ',');
+
+				pokemon[i][j][k].name = tmp_name;
+				vector<string>type = Push_Back_Object(tmp_type);
+				pokemon[i][j][k].type1 = type[0];
+				if(type.size() == 2) pokemon[i][j][k].type2 = type[1];
+				pokemon[i][j][k].abilities = Push_Back_Object(tmp_abilities);
+				pokemon[i][j][k].tier = tmp_tier;
+				pokemon[i][j][k].hp = stoi(tmp_hp);
+				pokemon[i][j][k].attack = stoi(tmp_attack);
+				pokemon[i][j][k].defense = stoi(tmp_defense);
+				pokemon[i][j][k].speAttack = stoi(tmp_speAttack);
+				pokemon[i][j][k].speDefense = stoi(tmp_speDefense);
+				pokemon[i][j][k].speed = stoi(tmp_speed);
+				pokemon[i][j][k].next_evoluation = Push_Back_Object(tmp_next_evoluation);
+				pokemon[i][j][k].move = Push_Back_Object(tmp_move);
+
+			}
+		}
+	}
+	fin.close();
+	return pokemon;
+}
+void printPokemonPointer(Pokemon***& pokemon, int p, int m, int n)
+{
+	for (int i = 0; i < p; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			for (int k = 0; k < n; k++)
+			{
+				cout << pokemon[i][j][k].name << " ";
+				cout << pokemon[i][j][k].type1 << " " << pokemon[i][j][k].type2 << " ";
+				for (int l = 0; l < pokemon[i][j][k].abilities.size(); l++)
+				{
+					cout << pokemon[i][j][k].abilities[l] << "=";
+				}
+				cout << pokemon[i][j][k].tier << " ";
+				cout << pokemon[i][j][k].hp << " ";
+				cout << pokemon[i][j][k].attack << " ";
+				cout << pokemon[i][j][k].defense << " ";
+				cout << pokemon[i][j][k].speAttack << " ";
+				cout << pokemon[i][j][k].speDefense << " ";
+				cout << pokemon[i][j][k].speed << " ";
+				for (int l = 0; l < pokemon[i][j][k].next_evoluation.size(); l++)
+				{
+					cout << pokemon[i][j][k].next_evoluation[l] << "=";
+				}
+				for (int l = 0; l < pokemon[i][j][k].move.size(); l++)
+				{
+					cout << pokemon[i][j][k].move[l] << "=";
+				}
+				cout << endl << endl;
+			}
+		}
 	}
 }

@@ -137,7 +137,7 @@ DNodeFile* createDNodeFile(Examinee data);
 struct Pokemon
 {
 	string name;
-	vector<string>type;
+	string type1, type2;
 	vector<string>abilities;
 	string tier;
 	int hp, attack, defense, speAttack, speDefense, speed;
@@ -162,3 +162,6 @@ void removeSpePunctuation(string& s);
 vector<string>Push_Back_Object(string s);
 void readFilePokemon(string fileName, DListPokemon& lst);
 void printPokemon(DListPokemon lst);
+int countNumsPokemon(string fileName);
+Pokemon*** readFilePokemonPointer(string fileName, int p, int m, int n);
+void printPokemonPointer(Pokemon***& pokemon, int p, int m, int n);
