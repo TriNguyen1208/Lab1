@@ -1575,7 +1575,7 @@ vector<string>Push_Back_Object(string s)
 	removeDauNgoacVuong(s);
 	if (s.empty())
 	{
-		return { " " };
+		return results;
 	}
 	stringstream ss_one_object(s);
 	string one_object;
