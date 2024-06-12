@@ -139,7 +139,6 @@ struct Pokemon
 	string name;
 	string type1, type2;
 	vector<string>abilities;
-	string tier;
 	int hp, attack, defense, speAttack, speDefense, speed;
 	vector<string> next_evoluation;
 	vector<string>move;
@@ -157,7 +156,7 @@ struct DListPokemon
 };
 void addTail(DListPokemon& lst, Pokemon data);
 DNodePokemon* createNode(Pokemon data);
-void removeDauNgoacVuongAndDauNgoacKep(string& s);
+void removeDauNgoacVuong(string& s);
 void removeSpePunctuation(string& s);
 vector<string>Push_Back_Object(string s);
 void readFilePokemon(string fileName, DListPokemon& lst);
